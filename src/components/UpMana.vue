@@ -16,26 +16,26 @@
     </div> 
     <TabHead />
     <div :id="itemBoxId">
+      <TabItem  v-for="up in ups" :key="up.vId" :up=up />
     </div>
   </div>
 </template>
 
 <script scoped>
-import TabItem from '../components/ManaTableItemUp.vue'
+import TabItem from '../components/ItemUp.vue'
 import TabHead from '../components/ManaTableHead.vue'
 import axios from '../lib/axios'
 import func from '../lib/func'
 const caches = {selected: "", obj: {}}
-const localData = {ups: [], count: 0}
-const children = []
+var vId = 0
 
 export default {
   name: 'UpMana',
   components: {
-    TabHead
+    TabHead, TabItem
   },
   data() {
-    return {ups: localData.ups, caches, itemBoxId: 'TableItemBox'}
+    return {ups: [], caches, itemBoxId: 'TableItemBox'}
   },
   created() {
     this.fetchData()
@@ -51,19 +51,24 @@ export default {
         })
     },
     add() {
-      const dom = document.querySelector(`#${this._data.itemBoxId}`)
-      var clearedData = func.addComp(dom, TabItem, 'up-item-dom', localData.count+1, this)
-      localData.ups.push(clearedData)
-      children.push(clearedData)
-      localData.count++
-      return clearedData
+      var up = {
+        lists: [
+          {val: 0}, {val: 0}, {val: 1}, {val: 0}, {val: 1}, {val: 0},{val: 1}, {val: 1}, 
+          {val: 1}, {val: 0}, {val: 1}, {val: 0,vals: []}, {val: 0,vals: []}, {val: 0,vals: []}
+        ],
+        checked: true,
+        listId: 0,
+        vId: ++vId
+      }
+      this._data.ups.push(up)
+      this.refreshListId()
     },
     save() {
       this.$prompt('保存名称', '保存', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(({ value }) => {
-        var _d = {ups: localData.ups.slice(), count: localData.count, type: 'uponly'}
+        var _d = {ups: this._data.ups.slice(), type: 'uponly'}
         axios.post('/api/data', {
           key: value,
           data: _d
@@ -81,28 +86,15 @@ export default {
       });
     },
     load(data) {
-      this._clear()
       var d = data || caches.selected && caches.obj[caches.selected]
       if (!d) return
-      const loading = this.$loading({
-        lock: true,
-        text: '数据加载中，请稍候...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
+      this._clear()
+      d.ups.forEach((up) => {
+        up.listId = 0
+        up.vId = ++vId
+        this._data.ups.push(up)
       })
-      setTimeout(() => {
-        const dom = document.querySelector(`#${this._data.itemBoxId}`)
-        func.addCompMutil(dom, TabItem, d.ups.length, this, (vd, i) => {
-          func.match(d.ups[i], vd)
-          vd.refresh && vd.refresh()
-          children.push(vd)
-        })
-        localData.ups = d.ups
-        localData.count = d.ups.length
-        this.$nextTick(() => {
-          loading.close()
-        })
-      }, 100)
+      this.refreshListId()
     },
     clear() {
       this.$confirm('确认清空?', '提示', {
@@ -115,22 +107,20 @@ export default {
       });
     },
     _clear() {
-      var dom = document.querySelector(`#${this._data.itemBoxId}`)
-      if(dom) dom.innerHTML = ''
-      localData.ups = [] 
-      localData.count = 0
-      children = []
+      this._data.ups = [] 
     },
     childRemove(id) {
-      localData.ups.splice(id-1, 1)
-      children.splice(id-1, 1)
-      localData.count--
-      refreshListId()
-      console.log(id, localData.ups, children)
+      this._data.ups.splice(id-1, 1)
+      this.refreshListId()
     },
     refreshListId() {
-      children.forEach((child, i) => {
-        child.listId = i+1
+      var c = 0
+      this._data.ups.forEach((up, i) => {
+        if (up.checked) {
+          up.listId = ++c
+        } else {
+          up.listId = ''
+        }
       })
     }
   }

@@ -2,8 +2,6 @@
 const lists = [{
     name: '启用'
   }, {
-    name: '序号'
-  }, {
     name: '双机芯'
   }, {
     name: '上显示/下推杆'
@@ -50,7 +48,7 @@ const lists = [{
 .tableItem {
   position: relative;
   height: 28px;
-  width:1450px;
+  width:1510px;
 }
 .tableItem li {
   float: left;
@@ -63,6 +61,9 @@ const lists = [{
   width: 60px;
 }
 .tableItem li:nth-child(2) {
+  width: 60px;
+}
+.tableItem li:nth-child(15) {
   width: 60px;
 }
 .el-divider {

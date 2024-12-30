@@ -4,7 +4,7 @@
   overflow-x: scroll;
 }
 #TableItemBoxBoth {
-  width: 1450px;
+  width: 1510px;
   font-size: 12px;
   line-height: 28px;
   max-height:600px;
@@ -12,7 +12,7 @@
   overflow-x: hidden;
 }
 #TestBinTableItemBox {
-  width: 1450px;
+  width: 1510px;
   max-height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -60,32 +60,31 @@ a {
     </div> 
     <TabHead />
     <div :id="itemBoxId">
+      <TabItem  v-for="(up, i) in ups" :key="up.vId" :up=ups[i] :down=downs[i] />
     </div>
   </div>
 </template>
 
 <script scoped>
-import TabItemBoth from '../components/ManaTableItemBoth.vue'
+import TabItem from '../components/ItemBoth.vue'
 import TabHead from '../components/ManaTableHeadBoth.vue'
 import axios from '../lib/axios'
 import func from '../lib/func'
 const caches = {selected: "", obj: {}}
-const localData = {ups: [], downs: [], count: 0}
-
+var vId = 0
 
 export default {
   name: 'ManaBoth',
   components: {
-    TabHead
+    TabHead, TabItem
   },
   data() {
-    return {ups: localData.ups, caches, itemBoxId: 'TableItemBoxBoth'}
+    return {ups: [], downs: [], caches, itemBoxId: 'TableItemBoxBoth'}
   },
   created() {
     this.fetchData()
   },
   mounted() {
-    console.log('mounted', new Date())
   },
   methods: {
     fetchData() {
@@ -98,21 +97,33 @@ export default {
         })
     },
     add() {
-      const dom = document.querySelector(`#${this._data.itemBoxId}`)
-      var clearedData = func.addComp(dom, TabItemBoth, 'both-item-dom')
-      var clearedDataUp = {lists: clearedData.uLists, checked: true}
-      var clearedDataDown = {lists: clearedData.dLists, checked: true}
-      localData.ups.push(clearedDataUp)
-      localData.downs.push(clearedDataDown)
-      localData.count++
-      return {clearedDataUp, clearedDataDown, clearedData}
+      var up = {
+        lists: [
+          {val: 0}, {val: 0}, {val: 1}, {val: 0}, {val: 1}, 
+          {val: 0},{val: 1}, {val: 1}, {val: 1}, {val: 0}, 
+          {val: 1}, {val: 0,vals: []}
+        ],
+        checked: true,
+        listId: 0,
+        vId: ++vId
+      }
+      var down = {
+        lists: [
+          {val: 0, vals: []}, {val: 0}, {val: 1}, {val: 0}, {val: 1}, 
+          {val: 0},{val: 1}, {val: 1}, {val: 1}, {val: 0}, 
+          {val: 1}, {val: 0,vals: []}
+        ]
+      }
+      this._data.ups.push(up)
+      this._data.downs.push(down)
+      this.refreshListId()
     },
     save() {
       this.$prompt('保存名称', '保存', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(({ value }) => {
-        var _d = {ups: localData.ups.slice(), downs: localData.downs.slice(), count: localData.count, type: 'both'}
+        var _d = {ups: this._data.ups.slice(), downs: this._data.downs.slice(), type: 'both'}
         axios.post('/api/data', {
           key: value,
           data: func.clearData(_d)
@@ -128,26 +139,16 @@ export default {
       });
     },
     load(data) {
-      this.clear()
       var d = data || caches.selected && caches.obj[caches.selected]
       if (!d) return
-      const loading = this.$loading({
-        lock: true,
-        text: '数据加载中，请稍候...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
+      this._clear()
+      d.ups.forEach((up) => {
+        up.listId = 0
+        up.vId = ++vId
+        this._data.ups.push(up)
       })
-      setTimeout(() => {
-        const dom = document.querySelector(`#${this._data.itemBoxId}`)
-        func.addCompMutil(dom, TabItemBoth, d.ups.length, (vd, i) => {
-          func.match(d.ups[i], {lists: vd.uLists, checked: true})
-          func.match(d.downs[i], {lists: vd.dLists, checked: true})
-          vd.refresh()
-        })
-        this.$nextTick(() => {
-          loading.close()
-        })
-      }, 100)
+      this._data.downs = d.downs
+      this.refreshListId()
     },
     clear() {
       this.$confirm('确认清空?', '提示', {
@@ -160,16 +161,24 @@ export default {
       });
     },
     _clear() {
-      document.querySelector(`#${this._data.itemBoxId}`).innerHTML = ''
-      localData.ups = [] 
-      localData.downs = [] 
-      localData.count = 0
+      this._data.ups = [] 
+      this._data.downs = [] 
     },
     childRemove(id) {
-      localData.ups.splice(id-1, 1)
-      localData.downs.splice(id-1, 1)
-      localData.count--
-      this.load(localData)
+      this._data.ups.splice(id-1, 1)
+      this._data.downs.splice(id-1, 1)
+      this.refreshListId()
+    },
+    refreshListId() {
+      var c = 0
+      this._data.ups.forEach((up, i) => {
+        if (up.checked) {
+          up.listId = ++c
+        } else {
+          up.listId = ''
+        }
+      })
+      console.log(this)
     }
   }
 }
