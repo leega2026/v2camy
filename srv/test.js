@@ -24,6 +24,11 @@ module.exports = {
 		})
 		ctx.status = 200
 	},
+	getPorts: async (ctx, next) => {
+		var ports = await SerialPort.list()
+		ctx.body = ports
+		await next()
+	},
 	testPortStatus: (ctx, next) => {
 		var q = ctx.request.query
 		var pIns = PortIns.get(q.port)

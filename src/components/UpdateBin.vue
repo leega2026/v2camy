@@ -38,7 +38,14 @@
       :options="options"
       @change="handleChange">
       </el-cascader>
-      <el-input v-model="start" placeholder="起始地址"></el-input>
+      <el-select v-model="start" placeholder="起始地址">
+        <el-option
+          v-for="(item, i) in addrLists"
+          :key="i"
+          :label="'AUTO'+i"
+          :value="i">
+        </el-option>
+      </el-select>
       <el-button type="primary"  icon="el-icon-circle-check"><a :href="href" target="_blank">刷机</a></el-button>
     </div> 
   </div>
@@ -47,7 +54,7 @@
 <script scoped>
 import axios from '../lib/axios'
 
-const caches = {start: '', value: [], options: [], href: ''}
+const caches = {start: '', value: [], options: [], href: '', addrLists: new Array(26)}
 export default {
   data() {
     return caches

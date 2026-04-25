@@ -7,17 +7,17 @@ module.exports = {
 	initPort(path, baudRate, deviceId) {
 		var pIns = this.get(path)
 		console.log('initPort', path, baudRate, deviceId, pIns&&pIns.valid)
-		if (pIns && pIns.port && pIns.valid) return pIns
+		// if (pIns && pIns.port && pIns.valid) return pIns
 		if (pIns && pIns.port) {
 			pIns.connect()
 			return pIns
 		}
-		var myPort = new SerialPort({path, baudRate})
+		var myPort = new SerialPort({path, baudRate, highWaterMark: 32})
 		// const parser = myPort.pipe(new ReadlineParser())
 		pIns = this[path] = {
 			port: myPort, valid: false, deviceId, data: {}, resBox: [], 
 			posCache: {
-				up: 0, down: 0, curStep: 0, curPos: 0
+				up: 0, down: 0, curStep: 0, curPos: 0, jian: 0,
 			}, cache: {d: null, len: 0},
 			close: function (err) {
 				this.valid = false
@@ -57,6 +57,7 @@ module.exports = {
 							this._handleData(d)
 						}
 					}
+					console.log('data len: ', buf.length, this.cache.wait)
 				} else if (isPosBuf && buf.length - 2 < posLen) {
 					this.cache.d = buf
 					this.cache.wait = 1
@@ -104,6 +105,7 @@ module.exports = {
 			},
 			handlePosChange: function (buf) {
 				var len = buf.length
+				this.posCache.jian = buf[len-6]
 				this.posCache.up = buf[len-5]
 				this.posCache.down = buf[len-4]
 				this.posCache.curPos = buf[len-3]
@@ -142,6 +144,10 @@ module.exports = {
 			console.log(`port ${path} is open`)
 			pIns.connect()
 		})
+		myPort.on('close', () => {
+			console.log(`port ${path} is close`)
+			this[path] = null
+		})
 		myPort.on('data', (buf) => {
 			pIns.handleData(buf)
 		})
@@ -157,7 +163,8 @@ module.exports = {
 			return pIns
 		}
 		return null
-	}
+	},
+	buildFirstStepBuf
 }
 
 function getConnectHex(deviceId, ram) {
@@ -245,5 +252,5 @@ function len2Byte(len) {
 	return res
 }
 function buildFirstStepBuf(type, step) {
-	return Buffer.alloc(Type2ByteNum[type], 'AA55' + len2Byte(step) + Type2ByteHex[type] + Type2HexPadding[type])
+	return Buffer.alloc(Type2ByteNum[type], 'AA55' + len2Byte(step) + Type2ByteHex[type] + Type2HexPadding[type], 'hex')
 }

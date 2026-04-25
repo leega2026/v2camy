@@ -2,7 +2,23 @@
  
   export default {
     data() {
+      var sLists = [{
+        id: 32,
+        range: [0, 255],
+        val: 1
+      }, {
+        id: 33,
+        range: [0, 255],
+        val: 1
+      }]
+      for (var i = 0; i <= 15; i++) {
+        sLists.push({
+          id: 34 + i,
+          val: 0
+        })
+      }
       return {
+        sLists: sLists,
         uLists: [{
           id: 0,
           selecs: [{key: 'KNEAD', val: 0}, {key: 'KNOCK', val: 1}, {key: 'PRESS', val: 2}, 
@@ -151,7 +167,7 @@
         doSwitch: false
       };
     },
-    props: ['up', 'down'],
+    props: ['up', 'down', 'sw'],
     mounted() {
     	this.refresh()
   	},
@@ -208,7 +224,7 @@ function val2binaryArr(val) {
 </script>
 
 <template>
-  <div>
+<div>
   <div class="tableItem">
     <li>
       <span>{{up.listId}}</span>
@@ -282,17 +298,47 @@ function val2binaryArr(val) {
     <li>
       <div style="width:30px;height:20px"></div>
     </li>
-    <el-divider></el-divider>
   </div>
+  <div class="tableItem">
+    <li><div style="width:30px;height:22px"></div></li>
+    <li><span>力度</span></li>
+    <li>
+      <el-input-number size="mini" type="number" :min=sLists[0].range[0] :max=sLists[0].range[1] v-model="sw.lists[0].val"> 
+      </el-input-number>
+    </li>
+    <li>
+      <el-input-number size="mini" type="number" :min=sLists[1].range[0] :max=sLists[1].range[1] v-model="sw.lists[1].val"> 
+      </el-input-number>
+    </li>
+    <li><span>气泵</span></li>
+    <li class="li-switch-small" v-for="(list, i) in sw.lists" :key="sLists[i].id" v-if="!sLists[i].range">
+      <el-switch 
+        active-value=1
+        inactive-value=0
+        v-model="list.val"
+        active-color="#13ce66"
+        inactive-color="#ff4949">
+      </el-switch>
+    </li>
+    <li><div style="width:30px;height:20px"></div></li>
+    <el-divider ></el-divider>
   </div>
+</div>
 </template>
 
 <style scoped>
 .tableItem {
   min-width:1510px;
+  text-align: left;
 }
 .tableItem li {
   width: 110px;
+  list-style: none;
+  display: inline-block;
+  text-align: center;
+}
+.tableItem li.li-switch-small {
+  width: 50px;
   list-style: none;
   display: inline-block;
 }

@@ -13,6 +13,9 @@
 #main5 .buttonBox .el-input {
   width: 100px !important;
 }
+#main5 .buttonBox .addr-select {
+  width: 100px !important;
+}
 #main5 .buttonBox .el-statistic{
   display: inline-block;
   width: 70px;
@@ -72,12 +75,26 @@
     <el-col :span="12">
       <div class="buttonBox">
         <el-divider content-position="left">串口连接</el-divider>
-        <el-input v-model="port" placeholder="端口号"></el-input>
+        <el-select class="addr-select" v-model="port" placeholder="请选择">
+          <el-option
+            v-for="item in ports"
+            :key="item.path"
+            :label="item.path"
+            :value="item.path">
+          </el-option>
+        </el-select>
         <el-input v-model="byte" placeholder="波特率"></el-input>
         <el-input v-model="deviceId" placeholder="机器型号"></el-input>
         <el-button type="primary" @click="connect" icon="el-icon-circle-check">连接</el-button>
         <el-divider content-position="left">bin读取/发送</el-divider>
-        <el-input-number type="number" min=0 max=25 v-model="addrIndex"></el-input-number>
+        <el-select class="addr-select" v-model="addrIndex" placeholder="请选择">
+          <el-option
+            v-for="(item, i) in addrLists"
+            :key="i"
+            :label="'AUTO'+i"
+            :value="i">
+          </el-option>
+        </el-select>
         <el-button :disabled="!connectValided" type="primary" @click="fetchBin" icon="el-icon-circle-check">读取</el-button>
         <el-cascader
         v-model="value"
@@ -86,26 +103,25 @@
         </el-cascader>
           <el-button :disabled="!connectValided" type="primary" @click="updateBin" icon="el-icon-circle-check">发送</el-button>
         <el-divider content-position="left">肩位调整</el-divider>
-        <el-tooltip content="开始肩位调整" placement="bottom" effect="light">
-          <el-button :disabled="!connectValided" @click="startPosSet" type="primary" icon="el-icon-caret-right" circle></el-button>
-        </el-tooltip>
         <el-tooltip content="上行" placement="bottom" effect="light">
           <el-button :disabled="!connectValided" @mousedown.native="startIncUpPos" @mouseup.native="stopSetPos" type="warning" icon="el-icon-caret-top" circle></el-button>
         </el-tooltip>
-        <el-statistic :precision="0" :value="pos.up" title="上机芯位置"></el-statistic>
+        <el-statistic :precision="0" :value="pos.jian" title="肩部位置"></el-statistic>
         <el-tooltip content="下行" placement="bottom" effect="light">
           <el-button :disabled="!connectValided" @mousedown.native="startDecUpPos" @mouseup.native="stopSetPos" type="warning" icon="el-icon-caret-bottom" circle></el-button>
         </el-tooltip>
         <el-tooltip content="肩位调整确定" placement="bottom" effect="light">
           <el-button :disabled="!connectValided" @click="savePosSet" type="success" icon="el-icon-finished" circle></el-button>
         </el-tooltip>
+        <el-statistic :precision="0" :value="pos.up" title="上机芯位置"></el-statistic>
         <el-statistic :precision="0" :value="pos.down" title="下机芯位置"></el-statistic>
         <el-statistic :precision="0" :value="pos.curPos" title="3D推出位置"></el-statistic>
         <el-statistic :precision="0" :value="pos.curStep" title="当前步数"></el-statistic>
         <el-divider content-position="left">按摩椅操作</el-divider>
-        <el-button :disabled="!connectValided" type="primary" @click="sendCmd('3234')" icon="el-icon-circle-check">启动</el-button>
+        <el-button :disabled="!connectValided" type="primary" @click="startPosSet" icon="el-icon-circle-check">启动</el-button>
         <el-button :disabled="!connectValided" type="primary" @click="sendCmd('3235')" icon="el-icon-circle-check">暂停</el-button>
         <el-button :disabled="!connectValided" type="primary" @click="sendCmd('3236')" icon="el-icon-circle-check">复位</el-button>
+        <el-button :disabled="!connectValided" type="primary" @click="sendCmd('3230')" icon="el-icon-circle-check">关机</el-button>
         <el-divider content-position="left">指令发送</el-divider>
         <el-select
           v-model="commands"
@@ -136,8 +152,8 @@ import axios from '../lib/axios'
 import func from '../lib/func'
 
 const caches = {
-  port: 'COM3', value: [], options: [], hex: true, byte: '38400', deviceId: 'GR241209',
-  activeComp: false, index: 0, connectValided: false, addrIndex: 0,
+  port: 'COM3', value: [], options: [], hex: true, byte: '38400', deviceId: 'GR241209', ports: [],
+  activeComp: false, index: 0, connectValided: false, addrIndex: 0, addrLists: new Array(30),
   commands: [], allCommands: [], res: [], pos: {up: 0, down: 0, curStep: 0, curPos: 0, timer: null}
 }
 export default {
@@ -163,7 +179,15 @@ export default {
         .catch(e => {
           console.error('err ', e)
         })
-
+      setInterval(() => {
+        axios.get('/api/ports')
+          .then(res => {
+            caches.ports = res.data
+          })
+          .catch(e => {
+            console.error('err ', e)
+          })
+      }, 2000)
     },
     fetchBin() {
       axios.get(`/api/test/bin/cmd?port=${caches.port}&index=${caches.addrIndex}`)
@@ -190,19 +214,21 @@ export default {
     connect() {
       axios.get(`/api/test/open?port=${caches.port}&byte=${caches.byte}&deviceId=${caches.deviceId}`)
         .then(() => {
-          axios.get(`/api/test/status?port=${caches.port}`)
-            .then((res) => {
-              if (res.data.valid) {
-                this.$message({message: '连接成功！', type: 'success'})
-                caches.connectValided = true
-                this.setupFetchPortRes()
-              } else {
+          setTimeout(() => {
+            axios.get(`/api/test/status?port=${caches.port}`)
+              .then((res) => {
+                if (res.data.valid) {
+                  this.$message({message: '连接成功！', type: 'success'})
+                  caches.connectValided = true
+                  this.setupFetchPortRes()
+                } else {
+                  this.$message.error('状态验证失败，请稍后再试！')
+                }
+              })
+              .catch(e => {
                 this.$message.error('状态验证失败，请稍后再试！')
-              }
-            })
-            .catch(e => {
-              this.$message.error('状态验证失败，请稍后再试！')
-            })
+              })
+          }, 200)
         })
         .catch(e => {
           this.$message.error('连接失败，请稍后再试！')
@@ -210,10 +236,11 @@ export default {
     },
     updateBin() {
       if (!caches.activeComp) return
+      var co = caches.activeComp._data.caches
       axios.post(`/api/test/bin`, {
         port: caches.port,
-        type: caches.value[0],
-        data: caches.activeComp._data.caches.obj[caches.value[1]]
+        type: co.type,
+        data: co.obj[co.selected]
       })
         .then(res => {
           console.log(res)
@@ -279,6 +306,9 @@ export default {
       })
     },
     sendCmd(cmd, mute) {
+      if (cmd == '3236' && caches.pos.startTimer) { // 复位
+        clearInterval(caches.pos.startTimer)
+      }
       axios.get(`api/test/cmd?port=${caches.port}&cmd=${cmd}`)
       .then(() => {
         if (!mute) this.$message({message: '指令发送成功！', type: 'success'})
@@ -290,6 +320,7 @@ export default {
     refreshPos() {
       axios.get(`api/pos?port=${caches.port}`)
       .then((res) => {
+        caches.pos.jian = res.data.jian
         caches.pos.up = res.data.up
         caches.pos.down = res.data.down
         caches.pos.curPos = res.data.curPos
@@ -338,7 +369,10 @@ export default {
       }, 200)
     },
     startPosSet() {
-      this.sendCmd('3230')
+      this.sendCmd('3234')
+      caches.pos.startTimer = setInterval(() => {
+        this.refreshPos()
+      }, 1000)
     },
     startIncUpPos() {
       if (caches.pos.timer) clearInterval(caches.pos.timer)

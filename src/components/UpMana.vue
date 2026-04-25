@@ -12,7 +12,9 @@
         </el-option>
       </el-select>
       <el-button type="primary" @click="load()" size="mini" icon="el-icon-download">载入</el-button>
+      <el-button type="danger" @click="deleteOne" size="mini" icon="el-icon-delete">删除</el-button>
       <el-button type="danger" @click="clear" size="mini" icon="el-icon-delete">清空</el-button>
+      <el-button type="primary" @click="excel" size="mini" icon="el-icon-eleme">转Excel</el-button>
     </div> 
     <TabHead />
     <div :id="itemBoxId">
@@ -26,7 +28,7 @@ import TabItem from '../components/ItemUp.vue'
 import TabHead from '../components/ManaTableHead.vue'
 import axios from '../lib/axios'
 import func from '../lib/func'
-const caches = {selected: "", obj: {}}
+const caches = {selected: "", obj: {}, type: 'uponly'}
 var vId = 0
 
 export default {
@@ -66,7 +68,8 @@ export default {
     save() {
       this.$prompt('保存名称', '保存', {
         confirmButtonText: '确定',
-        cancelButtonText: '取消'
+        cancelButtonText: '取消',
+        inputValue: caches.selected
       }).then(({ value }) => {
         var _d = {ups: this._data.ups.slice(), type: 'uponly'}
         axios.post('/api/data', {
@@ -95,6 +98,42 @@ export default {
         this._data.ups.push(up)
       })
       this.refreshListId()
+    },
+    excel() {
+      axios.get(`/api/excel?type=uponly&name=${caches.selected}`, { responseType: 'blob' })
+        .then(res => {
+          const url = URL.createObjectURL(res.data)
+          const a = document.createElement('a')
+          a.href = url
+          a.download = caches.selected + '.xlsx'
+          a.click()
+          URL.revokeObjectURL(url)
+          this.$message({message: '转换成功！', type: 'success'})
+        })
+        .catch(e => {
+          this.$message.error('转换失败，请稍后再试！')     
+        })
+    },
+    deleteOne() {
+      this.$confirm(`确认删除 ${caches.selected} 吗?`, '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this._deleteOne()
+      }).catch(() => {
+      });
+    },
+    _deleteOne() {
+      axios.get(`/api/data/del?type=uponly&name=${caches.selected}`)
+        .then(res => {
+          delete caches.obj[caches.selected]
+          caches.selected = ''
+          this.$message({message: '删除成功！', type: 'success'})
+        })
+        .catch(e => {
+          this.$message.error('删除失败，请稍后再试！');     
+        })
     },
     clear() {
       this.$confirm('确认清空?', '提示', {

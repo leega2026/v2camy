@@ -2,3 +2,8 @@ node_modules
 dist
 input
 prebuilds
+datatmp
+output
+publish
+app.js
+serv.log
