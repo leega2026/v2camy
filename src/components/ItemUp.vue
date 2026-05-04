@@ -1,8 +1,8 @@
 <script>
   const Lists = [{
-    selecs: [{key: 'KNEAD', val: 0}, {key: 'KNOCK', val: 1}, {key: 'PRESS', val: 2}, 
-      {key: 'WAVELET', val: 3}, {key: 'PAT', val: 4}, {key: 'SHIATSU', val: 5}, {key: 'SWING', val: 6}, 
-      {key: 'STRETCH', val: 7}],
+    selecs: [{key: 'KNEAD', val: 24}, {key: 'KNOCK', val: 25}, {key: 'PRESS', val: 26}, 
+      {key: 'WAVELET', val: 27}, {key: 'PAT', val: 28}, {key: 'SHIATSU', val: 29}, {key: 'SWING', val: 30}, 
+      {key: 'STRETCH', val: 31}],
     val: 0
   }, {
     selecs: [{key: 'PARK', val: 0}, {key: 'ABSULATE', val: 1}, {key: 'SHOULDER', val: 2}, {key: 'TOP', val: 3}, 

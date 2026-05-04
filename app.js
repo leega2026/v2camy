@@ -65424,13 +65424,13 @@ var require_json2exc = __commonJS({
         jd.push(
           [].concat(
             [id, "\u4E0A\u673A\u82AF"],
-            up.map((o, i2) => UpMap[i2] ? UpMap[i2][o.val] : o.val)
+            up.map((o, i2) => UpMap[i2] ? UpMap[i2][o.val] || 0 : o.val)
           )
         );
         jd.push(
           [].concat(
             ["", "\u4E0B\u673A\u82AF"],
-            down.map((o, i2) => DownMap[i2] ? DownMap[i2][o.val] : o.val)
+            down.map((o, i2) => DownMap[i2] ? DownMap[i2][o.val] || 0 : o.val)
           )
         );
         jd.push([].concat(["", "\u529B\u5EA6"], sw.slice(0, 2).map((o) => o.val), ["\u6C14\u6CF5"], sw.slice(2).map((o) => o.val)));
@@ -65508,7 +65508,7 @@ var require_json2exc = __commonJS({
         jd.push(
           [].concat(
             [id],
-            up.map((o, i2) => UpMap[i2] ? UpMap[i2][o.val] : o.val)
+            up.map((o, i2) => UpMap[i2] ? UpMap[i2][o.val] || 0 : o.val)
           )
         );
       });
@@ -65687,10 +65687,12 @@ var require_lib6 = __commonJS({
           downs: []
         };
         bufArr2.forEach((buf) => {
-          res2.ups.push(_binary2json(buf.subarray(0, 8)));
           if (len2 == 20) {
+            res2.ups.push(_binary2json(buf.subarray(0, 8)));
             res2.downs.push(_binary2json(buf.subarray(8, 16)));
             res2.sws.push(_binary2jsonSw(buf.subarray(16)));
+          } else {
+            res2.ups.push(_binary2jsonUp(buf.subarray(0, 12)));
           }
         });
         res2.count = res2.ups.length;
@@ -65760,6 +65762,28 @@ var require_lib6 = __commonJS({
           break;
       }
       return Buffer.from(arr, "hex");
+    }
+    function _binary2jsonUp(buf) {
+      var res2 = { checked: true, lists: [] };
+      res2.lists[0] = { id: 0, val: buf[0] };
+      res2.lists[1] = { id: 1, val: buf[1] };
+      res2.lists[2] = { id: 2, val: buf[2] };
+      var byte3 = num2binary8Bit(buf[3]);
+      res2.lists[3] = { id: 3, val: parseInt(byte3.slice(3), 2) };
+      res2.lists[4] = { id: 4, val: parseInt(byte3.slice(0, 3), 2) };
+      var byte4 = num2binary8Bit(buf[4]);
+      res2.lists[5] = { id: 5, val: parseInt(byte4.slice(5), 2) };
+      res2.lists[6] = { id: 6, val: parseInt(byte4.slice(0, 5), 2) };
+      var byte5 = num2binary8Bit(buf[5]);
+      res2.lists[7] = { id: 7, val: parseInt(byte5.slice(3), 2) };
+      res2.lists[8] = { id: 8, val: parseInt(byte5.slice(0, 3), 2) };
+      var byte6 = num2binary8Bit(buf[6]);
+      res2.lists[9] = { id: 9, val: parseInt(byte6.slice(6), 2) };
+      res2.lists[10] = { id: 10, val: parseInt(byte6.slice(0, 6), 2) };
+      res2.lists[11] = { id: 11, val: buf[7] };
+      res2.lists[12] = { id: 12, val: buf[8] };
+      res2.lists[13] = { id: 13, val: buf[9] };
+      return res2;
     }
     function _binary2json(buf) {
       var res2 = { checked: true, lists: [] };
@@ -68726,7 +68750,7 @@ var require_bin = __commonJS({
 // datatmp/cmds.json
 var require_cmds = __commonJS({
   "datatmp/cmds.json"(exports2, module2) {
-    module2.exports = { \u624B\u81C2\u6C14\u56CA: "55", \u80A9\u90E8\u6C14\u56CA: "57", \u817F\u811A\u6C14\u56CA: "54", \u81C0\u90E8\u6C14\u56CA: "56", hang: "3040" };
+    module2.exports = {};
   }
 });
 
