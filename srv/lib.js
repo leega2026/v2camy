@@ -33,10 +33,12 @@ module.exports = {
 			downs: []
 		}
 		bufArr.forEach((buf) => {
-			res.ups.push(_binary2json(buf.subarray(0, 8)))
 			if (len == 20) {
+				res.ups.push(_binary2json(buf.subarray(0, 8)))
 				res.downs.push(_binary2json(buf.subarray(8, 16)))
 				res.sws.push(_binary2jsonSw(buf.subarray(16)))
+			} else {
+				res.ups.push(_binary2jsonUp(buf.subarray(0, 12)))
 			}
 		})
 		res.count = res.ups.length
@@ -108,6 +110,29 @@ function json2binaryByType(type, j) {
 		break
 	}
 	return Buffer.from(arr, 'hex')
+}
+
+function _binary2jsonUp(buf) {
+	var res = {checked: true, lists: []}
+	res.lists[0] = {id: 0, val: buf[0]}
+	res.lists[1] = {id: 1, val: buf[1]}
+	res.lists[2] = {id: 2, val: buf[2]}
+	var byte3 = num2binary8Bit(buf[3])
+	res.lists[3] = {id: 3, val: parseInt(byte3.slice(3), 2)}
+	res.lists[4] = {id: 4, val: parseInt(byte3.slice(0, 3), 2)}
+	var byte4 = num2binary8Bit(buf[4])
+	res.lists[5] = {id: 5, val: parseInt(byte4.slice(5), 2)}
+	res.lists[6] = {id: 6, val: parseInt(byte4.slice(0, 5), 2)}
+	var byte5 = num2binary8Bit(buf[5])
+	res.lists[7] = {id: 7, val: parseInt(byte5.slice(3), 2)}
+	res.lists[8] = {id: 8, val: parseInt(byte5.slice(0, 3), 2)}
+	var byte6 = num2binary8Bit(buf[6])
+	res.lists[9] = {id: 9, val: parseInt(byte6.slice(6), 2)}
+	res.lists[10] = {id: 10, val: parseInt(byte6.slice(0, 6), 2)}
+	res.lists[11] = {id: 11, val: buf[7]}
+	res.lists[12] = {id: 12, val: buf[8]}
+	res.lists[13] = {id: 13, val: buf[9]}
+	return res
 }
 
 function _binary2json(buf) {

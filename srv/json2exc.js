@@ -95,12 +95,12 @@ function json2excBoth(name, d) {
 		var sw = d.sws[i].lists
 		jd.push(
 			[].concat(
-				[id, '上机芯'], up.map((o, i) => UpMap[i] ? UpMap[i][o.val] : o.val)
+				[id, '上机芯'], up.map((o, i) => UpMap[i] ? UpMap[i][o.val] || 0 : o.val)
 			)
 		)
 		jd.push(
 			[].concat(
-				['', '下机芯'], down.map((o, i) => DownMap[i] ? DownMap[i][o.val] : o.val)
+				['', '下机芯'], down.map((o, i) => DownMap[i] ? DownMap[i][o.val] || 0 : o.val)
 			)
 		)
 		jd.push([].concat(['', '力度'], sw.slice(0, 2).map(o => o.val), ['气泵'], sw.slice(2).map(o => o.val)))
@@ -170,7 +170,7 @@ function json2excUponly(name, d) {
 		var up = one.lists
 		jd.push(
 			[].concat(
-				[id], up.map((o, i) => UpMap[i] ? UpMap[i][o.val] : o.val)
+				[id], up.map((o, i) => UpMap[i] ? UpMap[i][o.val] || 0 : o.val)
 			)
 		)
 	})
