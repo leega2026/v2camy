@@ -65286,6 +65286,30 @@ var require_json2exc = __commonJS({
   "srv/json2exc.js"(exports2, module2) {
     var UpMap = {
       0: [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
         "KNEAD",
         "KNOCK",
         "PRESS",
@@ -65692,7 +65716,7 @@ var require_lib6 = __commonJS({
             res2.downs.push(_binary2json(buf.subarray(8, 16)));
             res2.sws.push(_binary2jsonSw(buf.subarray(16)));
           } else {
-            res2.ups.push(_binary2jsonUp(buf.subarray(0, 12)));
+            res2.ups.push(_binary2json(buf.subarray(0, 12)));
           }
         });
         res2.count = res2.ups.length;
@@ -65763,31 +65787,9 @@ var require_lib6 = __commonJS({
       }
       return Buffer.from(arr, "hex");
     }
-    function _binary2jsonUp(buf) {
-      var res2 = { checked: true, lists: [] };
-      res2.lists[0] = { id: 0, val: buf[0] };
-      res2.lists[1] = { id: 1, val: buf[1] };
-      res2.lists[2] = { id: 2, val: buf[2] };
-      var byte3 = num2binary8Bit(buf[3]);
-      res2.lists[3] = { id: 3, val: parseInt(byte3.slice(3), 2) };
-      res2.lists[4] = { id: 4, val: parseInt(byte3.slice(0, 3), 2) };
-      var byte4 = num2binary8Bit(buf[4]);
-      res2.lists[5] = { id: 5, val: parseInt(byte4.slice(5), 2) };
-      res2.lists[6] = { id: 6, val: parseInt(byte4.slice(0, 5), 2) };
-      var byte5 = num2binary8Bit(buf[5]);
-      res2.lists[7] = { id: 7, val: parseInt(byte5.slice(3), 2) };
-      res2.lists[8] = { id: 8, val: parseInt(byte5.slice(0, 3), 2) };
-      var byte6 = num2binary8Bit(buf[6]);
-      res2.lists[9] = { id: 9, val: parseInt(byte6.slice(6), 2) };
-      res2.lists[10] = { id: 10, val: parseInt(byte6.slice(0, 6), 2) };
-      res2.lists[11] = { id: 11, val: buf[7] };
-      res2.lists[12] = { id: 12, val: buf[8] };
-      res2.lists[13] = { id: 13, val: buf[9] };
-      return res2;
-    }
     function _binary2json(buf) {
       var res2 = { checked: true, lists: [] };
-      res2.lists[0] = { id: 0, val: buf[0] };
+      res2.lists[0] = { id: 0, val: buf[0] < 24 ? 24 : buf[0] };
       res2.lists[1] = { id: 1, val: buf[1] };
       res2.lists[2] = { id: 2, val: buf[2] };
       var byte3 = num2binary8Bit(buf[3]);
@@ -65803,6 +65805,10 @@ var require_lib6 = __commonJS({
       res2.lists[9] = { id: 9, val: parseInt(byte6.slice(6), 2) };
       res2.lists[10] = { id: 10, val: parseInt(byte6.slice(0, 6), 2) };
       res2.lists[11] = { id: 11, val: buf[7] };
+      if (buf.length > 8) {
+        res2.lists[12] = { id: 12, val: buf[8], vals: num2bitArr(+buf[8]) };
+        res2.lists[13] = { id: 13, val: buf[9], vals: num2bitArr(+buf[9]) };
+      }
       return res2;
     }
     function _binary2jsonSw(bufArr2) {
@@ -65818,6 +65824,16 @@ var require_lib6 = __commonJS({
         });
       });
       return res2;
+    }
+    function num2bitArr(num) {
+      var arr = [];
+      var bits = num.toString(2).split("");
+      bits.reverse();
+      var len2 = bits.length;
+      while (len2--) {
+        if (+bits[len2]) arr.push(Math.pow(2, len2));
+      }
+      return arr;
     }
     function num2binary8Bit(num) {
       var tmp = "00000000";

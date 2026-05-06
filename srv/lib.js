@@ -131,8 +131,8 @@ function _binary2json(buf) {
 	res.lists[10] = {id: 10, val: parseInt(byte6.slice(0, 6), 2)}
 	res.lists[11] = {id: 11, val: buf[7]}
 	if (buf.length > 8) {
-		res.lists[12] = {id: 12, val: buf[8]}
-		res.lists[13] = {id: 13, val: buf[9]}
+		res.lists[12] = {id: 12, val: buf[8], vals: num2bitArr(+buf[8])}
+		res.lists[13] = {id: 13, val: buf[9], vals: num2bitArr(+buf[9])}
 	}
 	return res
 }
@@ -150,6 +150,17 @@ function _binary2jsonSw(bufArr) {
 		})
 	})
 	return res
+}
+
+function num2bitArr(num) {
+	var arr = []
+	var bits = num.toString(2).split('')
+	bits.reverse()
+	var len = bits.length
+	while (len--) {
+		if (+bits[len]) arr.push(Math.pow(2, len))
+	}
+	return arr
 }
 
 function num2binary8Bit(num) {
