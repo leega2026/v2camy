@@ -1,8 +1,8 @@
 <script>
   const Lists = [{
-    selecs: [{key: 'KNEAD', val: 24}, {key: 'KNOCK', val: 25}, {key: 'PRESS', val: 26}, 
-      {key: 'WAVELET', val: 27}, {key: 'PAT', val: 28}, {key: 'SHIATSU', val: 29}, {key: 'SWING', val: 30}, 
-      {key: 'STRETCH', val: 31}],
+    selecs: [{key: 'KNEAD', val: 31}, {key: 'KNOCK', val: 32}, {key: 'PRESS', val: 33}, 
+      {key: 'WAVELET', val: 34}, {key: 'PAT', val: 35}, {key: 'SHIATSU', val: 36}, {key: 'SWING', val: 37}, 
+      {key: 'STRETCH', val: 38}],
     val: 0
   }, {
     selecs: [{key: 'PARK', val: 0}, {key: 'ABSULATE', val: 1}, {key: 'SHOULDER', val: 2}, {key: 'TOP', val: 3}, 
@@ -55,18 +55,20 @@
   }, {
     mutil: true,
     selecs: [{key: 'BLUP', val: 1}, {key: 'BLDW', val: 2}, 
-      {key: 'BLBUP', val: 4}, {key: 'BLBDW', val: 8},
-      {key: 'BLWUP', val: 16}, {key: 'BLWDW', val: 32},
-      {key: 'BFWUP', val: 64}, {key: 'BFWDW', val: 128}],
+      {key: 'BLBUP', val: 4}, {key: 'BLBDW', val: 8}, {key: 'BSUP', val: 16},
+      {key: 'BSDW', val: 32}, {key: 'BFUP', val: 64}, {key: 'BFDW', val: 128},
+      {key: 'BFWUP', val: 256}, {key: 'BFWDW', val: 512}, {key: 'BLWUP', val: 1024},
+      {key: 'BLWDW', val: 2048}, {key: 'BVC', val: 4096}],
     range: [0, 255],
     val: 0,
     vals: []
   }, {
     mutil: true,
-    selecs: [{key: 'V1', val: 1}, {key: 'V2', val: 2}, 
-      {key: 'V3', val: 4}, {key: 'V4', val: 8},
-      {key: 'V5', val: 16}, {key: 'V6', val: 32},
-      {key: 'V7', val: 64}, {key: 'V8', val: 128}],
+    selecs: [{key: 'BF0C', val: 1}, {key: 'BF1C', val: 2}, 
+      {key: 'BL0C', val: 4}, {key: 'BLA0C', val: 8},
+      {key: 'BTHC', val: 16}, {key: 'BNECK', val: 32},
+      {key: 'BRA0C', val: 64}, {key: 'BWSTC', val: 128},
+      {key: 'BL1C', val: 256}, {key: 'BPE', val: 512}],
     range: [0, 255],
     val: 0,
     vals: []

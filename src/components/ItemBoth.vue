@@ -21,9 +21,9 @@
         sLists: sLists,
         uLists: [{
           id: 0,
-          selecs: [{key: 'KNEAD', val: 24}, {key: 'KNOCK', val: 25}, {key: 'PRESS', val: 26}, 
-            {key: 'WAVELET', val: 27}, {key: 'PAT', val: 28}, {key: 'SHIATSU', val: 29}, 
-            {key: 'SWING', val: 30}, {key: 'STRETCH', val: 31}],
+          selecs: [{key: 'KNEAD', val: 31}, {key: 'KNOCK', val: 32}, {key: 'PRESS', val: 33}, 
+            {key: 'WAVELET', val: 34}, {key: 'PAT', val: 35}, {key: 'SHIATSU', val: 36}, 
+            {key: 'SWING', val: 37}, {key: 'STRETCH', val: 38}],
           val: 0
         }, {
           id: 1,

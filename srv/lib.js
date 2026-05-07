@@ -82,6 +82,18 @@ function json2binaryByType(type, j) {
 		arr.push(j[7].val + (j[8].val << 5))
 		arr.push(j[9].val + (j[10].val << 2))
 		arr.push(j[11].val)
+		if (type == 'uponly') {
+			var val2 = j[12] && j[12].val || 0
+			// 低8位
+			arr.push(val12 % 256)
+			// 高8位
+			arr.push(val12 - val12 % 256)
+			var val3 = j[13] && j[13].val || 0
+			// 低8位
+			arr.push(val13 % 256)
+			// 高8位
+			arr.push(val13 - val13 % 256)
+		}
 		break
 	case 'air':
 		for(var i = 0; i < 4; i++) {
@@ -131,8 +143,10 @@ function _binary2json(buf) {
 	res.lists[10] = {id: 10, val: parseInt(byte6.slice(0, 6), 2)}
 	res.lists[11] = {id: 11, val: buf[7]}
 	if (buf.length > 8) {
-		res.lists[12] = {id: 12, val: buf[8], vals: num2bitArr(+buf[8])}
-		res.lists[13] = {id: 13, val: buf[9], vals: num2bitArr(+buf[9])}
+		var val = buf[8] + buf[9]*256
+		res.lists[12] = {id: 12, val: val, vals: num2bitArr(val)}
+		val = buf[10] + buf[11]*256
+		res.lists[13] = {id: 13, val: val, vals: num2bitArr(val)}
 	}
 	return res
 }
