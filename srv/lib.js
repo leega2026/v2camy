@@ -83,12 +83,12 @@ function json2binaryByType(type, j) {
 		arr.push(j[9].val + (j[10].val << 2))
 		arr.push(j[11].val)
 		if (type == 'uponly') {
-			var val2 = j[12] && j[12].val || 0
+			var val12 = j[12] && j[12].val || 0
 			// 低8位
 			arr.push(val12 % 256)
 			// 高8位
 			arr.push(val12 - val12 % 256)
-			var val3 = j[13] && j[13].val || 0
+			var val13 = j[13] && j[13].val || 0
 			// 低8位
 			arr.push(val13 % 256)
 			// 高8位

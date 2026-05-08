@@ -65643,34 +65643,34 @@ var require_json2exc = __commonJS({
 var require_addr = __commonJS({
   "srv/addr.js"(exports2, module2) {
     module2.exports = [
-      "9000",
-      "9800",
-      "A000",
-      "A400",
-      "A800",
-      "AC00",
-      "B000",
-      "B400",
-      "B800",
-      "BC00",
-      "C000",
-      "C400",
-      "C800",
-      "CC00",
-      "D000",
-      "D200",
-      "D400",
-      "D600",
-      "D800",
-      "DA00",
-      "DC00",
-      "DE00",
-      "E000",
-      "E200",
-      "E400",
-      "E600",
-      "E800",
-      "EA00"
+      "0090",
+      "0098",
+      "00A0",
+      "00A8",
+      "00B0",
+      "00B8",
+      "00C0",
+      "00C8",
+      "00D0",
+      "00D8",
+      "00E0",
+      "00E8",
+      "00F0",
+      "00F8",
+      "0100",
+      "0108",
+      "0110",
+      "0118",
+      "0120",
+      "0128",
+      "0130",
+      "0138",
+      "0140",
+      "0148",
+      "0150",
+      "0159",
+      "0160",
+      "0168"
     ];
   }
 });
@@ -65758,6 +65758,14 @@ var require_lib6 = __commonJS({
           arr.push(j[7].val + (j[8].val << 5));
           arr.push(j[9].val + (j[10].val << 2));
           arr.push(j[11].val);
+          if (type2 == "uponly") {
+            var val12 = j[12] && j[12].val || 0;
+            arr.push(val12 % 256);
+            arr.push(val12 - val12 % 256);
+            var val13 = j[13] && j[13].val || 0;
+            arr.push(val13 % 256);
+            arr.push(val13 - val13 % 256);
+          }
           break;
         case "air":
           for (var i = 0; i < 4; i++) {
@@ -65806,8 +65814,10 @@ var require_lib6 = __commonJS({
       res2.lists[10] = { id: 10, val: parseInt(byte6.slice(0, 6), 2) };
       res2.lists[11] = { id: 11, val: buf[7] };
       if (buf.length > 8) {
-        res2.lists[12] = { id: 12, val: buf[8], vals: num2bitArr(+buf[8]) };
-        res2.lists[13] = { id: 13, val: buf[9], vals: num2bitArr(+buf[9]) };
+        var val = buf[8] + buf[9] * 256;
+        res2.lists[12] = { id: 12, val, vals: num2bitArr(val) };
+        val = buf[10] + buf[11] * 256;
+        res2.lists[13] = { id: 13, val, vals: num2bitArr(val) };
       }
       return res2;
     }
