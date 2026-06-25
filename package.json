@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build-web": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "pack": "robocopy ./dist ./publish/amy/dist && robocopy ./app.js ./publish/amy/app.js && ./datatmp ./publish/amy/datatmp && ./start.bat ./publish/amy/start.bat",
+    "pack": "robocopy ./dist ./publish/amy/dist && robocopy ./ ./publish/amy/ app.js  && robocopy ./datatmp ./publish/amy/datatmp && robocopy ./ ./publish/amy/ start.bat",
     "build-node": "esbuild server.js --bundle --format=cjs --outfile=app.js --platform=node",
     "build": "npm run build-web && npm run build-node",
     "build-exe": "node --experimental-sea-config sea-config.json && npx postject gramy.exe NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2",

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-tabs v-model="activeName" @tab-click="handleClick" >
+    <el-tabs v-model="activeName" @tab-click="handleClick" :before-leave="beforeTabChange" >
       <el-tab-pane></el-tab-pane>
       <el-tab-pane label="单机芯配置" name="up"><UpMana ref="uponly" /></el-tab-pane>
       <el-tab-pane label="双机芯配置" name="both"><BothMana ref="both" /></el-tab-pane>
@@ -27,8 +27,8 @@ export default {
   name: 'app',
   data() {
     return {
-      activeName: 'up',
-      showDrop: true
+      activeName: 'test',
+      showDrop: false
     };
   },
   components: {
@@ -42,11 +42,25 @@ export default {
   },
   methods: {
     handleClick(e) {
+      const isAuth = localStorage.getItem('isAuth')
+      if (isAuth != 'true') {
+        return false
+      }
       if (+e.index <= 3) {
         this.showDrop = true
       } else {
         this.showDrop = false
       }
+    },
+    beforeTabChange(newName, oldName) {
+      if (newName === 'test') return true
+
+      const isAuth = localStorage.getItem('isAuth')
+      if (isAuth != 'true') {
+        this.$message.error('请先认证！');
+        return false
+      }
+      return true
     },
     dropSuc(type, data) {
       console.log(type, data)

@@ -220,13 +220,16 @@ export default {
                 if (res.data.valid) {
                   this.$message({message: '连接成功！', type: 'success'})
                   caches.connectValided = true
+                  localStorage.setItem('isAuth', 'true')
                   this.setupFetchPortRes()
                 } else {
                   this.$message.error('状态验证失败，请稍后再试！')
+                  localStorage.setItem('isAuth', 'false')
                 }
               })
               .catch(e => {
                 this.$message.error('状态验证失败，请稍后再试！')
+                localStorage.setItem('isAuth', 'false')
               })
           }, 200)
         })

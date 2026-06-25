@@ -65352,12 +65352,13 @@ var require_json2exc = __commonJS({
         "RNR_P_MIN",
         "RNR_P_MED",
         "RNR_P_WAX",
-        "RN_MZ",
-        "RN_KM",
-        "RN_KZ"
+        "FMIN_MED",
+        "FMED_MAX",
+        "FMIN_MAX",
+        "RMIN_MAX"
       ],
       5: ["STOP", "QD_WID", "QD", "PD", "QD_MP3"],
-      9: ["3D_STOP", "3D_UP", "3D_DN", "3D_DNUP"]
+      9: ["D_STOP", "D_UP", "D_DN", "D_DNUP"]
     };
     var DownMap = {
       1: [
@@ -65366,11 +65367,11 @@ var require_json2exc = __commonJS({
         "TOP",
         "TOP_FW",
         "LOW_FW",
-        "1PART",
-        "2PART",
-        "3PART",
-        "4PART",
-        "5PART",
+        "PART1",
+        "PART2",
+        "PART3",
+        "PART4",
+        "PART5",
         "FULL"
       ],
       3: [
@@ -65391,12 +65392,13 @@ var require_json2exc = __commonJS({
         "RNR_P_MIN",
         "RNR_P_MED",
         "RNR_P_WAX",
-        "RN_MZ",
-        "RN_KM",
-        "RN_KZ"
+        "FMIN_MED",
+        "FMED_MAX",
+        "FMIN_MAX",
+        "RMIN_MAX"
       ],
       5: ["STOP", "QD_WID", "QD", "PD", "QD_MP3"],
-      9: ["3D_STOP", "3D_UP", "3D_DN", "3D_DNUP"]
+      9: ["D_STOP", "D_UP", "D_DN", "D_DNUP"]
     };
     module2.exports = {
       json2exc: (type2, name2, d) => {
@@ -65420,6 +65422,15 @@ var require_json2exc = __commonJS({
             return exc2jsonAir(jd.slice(1));
         }
         return {};
+      },
+      exc2txt: (jd) => {
+        var res2 = "";
+        jd = jd.slice(1);
+        jd.forEach((one) => {
+          res2 += `{${Object.values(one).slice(1).join(",")}},
+`;
+        });
+        return res2;
       }
     };
     function json2excBoth(name2, d) {
@@ -68988,7 +68999,7 @@ router.post("/api/data", (ctx) => {
   ctx.status = 200;
   ctx.body = { status: 200, data: "ok" };
 });
-var { json2exc, exc2json } = require_json2exc();
+var { json2exc, exc2json, exc2txt } = require_json2exc();
 router.get("/api/excel", (ctx) => {
   var q2 = ctx.request.query;
   if (!q2.type || !q2.name) {
@@ -69021,6 +69032,18 @@ router.post("/api/excel", (ctx) => {
   const worksheet = workbook.Sheets[sheetName];
   const jsonData = XLSX.utils.sheet_to_json(worksheet);
   ctx.body = exc2json(jsonData);
+});
+router.post("/api/excel/txt", (ctx) => {
+  const file = ctx.file;
+  if (!file) {
+    ctx.body = { code: 400, msg: "\u672A\u4E0A\u4F20\u6587\u4EF6" };
+    return;
+  }
+  const workbook = XLSX.read(file.buffer, { type: "buffer" });
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  const jsonData = XLSX.utils.sheet_to_json(worksheet);
+  ctx.body = exc2txt(jsonData);
 });
 var { getBin, updateBin } = require_bin();
 router.get("/api/bin", getBin);
