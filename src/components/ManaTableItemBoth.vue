@@ -31,8 +31,8 @@
             {key: 'R_P_MED', val: 10}, {key: 'R_P_WAX', val: 11}, 
             {key: 'RN_R', val: 12}, {key: 'RNR_P_OFF', val: 13}, 
             {key: 'RNR_P_MIN', val: 14}, {key: 'RNR_P_MED', val: 15}, 
-            {key: 'RNR_P_WAX', val: 16}, {key: 'RN_MZ', val: 17}, 
-            {key: 'RN_KM', val: 18}, {key: 'RN_KZ', val: 19}],
+            {key: 'RNR_P_WAX', val: 16}, {key: 'FMIN_MED', val: 17}, 
+            {key: 'FMED_MAX', val: 18}, {key: 'FMIN_MAX', val: 19}, {key: 'RMIN_MAX', val: 20}],
           val: 0
         }, {
           id: 4,

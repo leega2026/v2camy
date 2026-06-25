@@ -87,12 +87,12 @@ function json2binaryByType(type, j) {
 			// 低8位
 			arr.push(val12 % 256)
 			// 高8位
-			arr.push(val12 - val12 % 256)
+			arr.push(parseInt(val12/256))
 			var val13 = j[13] && j[13].val || 0
 			// 低8位
 			arr.push(val13 % 256)
 			// 高8位
-			arr.push(val13 - val13 % 256)
+			arr.push(parseInt(val13/256))
 		}
 		break
 	case 'air':

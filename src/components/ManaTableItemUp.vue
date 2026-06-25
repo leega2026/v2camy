@@ -18,11 +18,16 @@
           range: [0, 255],
           val: 1
         }, {
-          selecs: [{key: 'STOP', val: 0}, {key: 'P_MIN', val: 1}, {key: 'P_MED', val: 2}, {key: 'P_WAX', val: 3}, 
-            {key: 'RN_F', val: 4}, {key: 'RN_P_OFF', val: 5}, {key: 'RN_P_MIN', val: 6}, 
-            {key: 'RN_P_MED', val: 7}, {key: 'RN_P_MAX', val: 8}, 
-            {key: 'R_P_MIN', val: 9}, {key: 'R_P_MED', val: 10}, 
-            {key: 'R_P_WAX', val: 11}, {key: 'RN_R', val: 12}],
+          selecs: [
+            {key: 'STOP', val: 0}, {key: 'P_MIN', val: 1}, {key: 'P_MED', val: 2}, 
+            {key: 'P_WAX', val: 3}, {key: 'RN_F', val: 4}, {key: 'RN_P_OFF', val: 5}, 
+            {key: 'RN_P_MIN', val: 6}, {key: 'RN_P_MED', val: 7}, 
+            {key: 'RN_P_MAX', val: 8}, {key: 'R_P_MIN', val: 9}, 
+            {key: 'R_P_MED', val: 10}, {key: 'R_P_WAX', val: 11}, 
+            {key: 'RN_R', val: 12}, {key: 'RNR_P_OFF', val: 13}, 
+            {key: 'RNR_P_MIN', val: 14}, {key: 'RNR_P_MED', val: 15}, 
+            {key: 'RNR_P_WAX', val: 16}, {key: 'FMIN_MED', val: 17}, 
+            {key: 'FMED_MAX', val: 18}, {key: 'FMIN_MAX', val: 19}, {key: 'RMIN_MAX', val: 20}],
           val: 0
         }, {
           range: [0, 7],

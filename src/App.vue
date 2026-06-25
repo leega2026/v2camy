@@ -7,9 +7,10 @@
       <el-tab-pane label="气泵配置" name="air"><AirMana ref="air" /></el-tab-pane>
       <el-tab-pane label="刷机" name="update"><UpdateBin /></el-tab-pane>
       <el-tab-pane label="串口测试" name="test"><TestBin /></el-tab-pane>
+      <el-tab-pane label="转源文件" name="txt"><TxtDrop /></el-tab-pane>
     </el-tabs>
     <div id="app-body"></div>
-    <FileDrop />
+    <FileDrop v-show="showDrop" />
   </div>
 </template>
 
@@ -20,12 +21,14 @@ import AirMana from './components/AirMana.vue'
 import UpdateBin from './components/UpdateBin.vue'
 import TestBin from './components/TestBin.vue'
 import FileDrop from './components/FileDrop.vue'
+import TxtDrop from './components/TxtDrop.vue'
 
 export default {
   name: 'app',
   data() {
     return {
-      activeName: 'up'
+      activeName: 'up',
+      showDrop: true
     };
   },
   components: {
@@ -34,11 +37,16 @@ export default {
     AirMana,
     UpdateBin,
     TestBin,
-    FileDrop
+    FileDrop,
+    TxtDrop
   },
   methods: {
-    handleClick(val, event) {
-      console.log(val, event)
+    handleClick(e) {
+      if (+e.index <= 3) {
+        this.showDrop = true
+      } else {
+        this.showDrop = false
+      }
     },
     dropSuc(type, data) {
       console.log(type, data)

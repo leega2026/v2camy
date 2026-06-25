@@ -67,7 +67,7 @@ router.post('/api/data', (ctx) => {
 })
 
 
-const { json2exc, exc2json } = require('./srv/json2exc')
+const { json2exc, exc2json, exc2txt } = require('./srv/json2exc')
 router.get('/api/excel', (ctx) => {
 	var q = ctx.request.query
 	if (!q.type || !q.name) {
@@ -104,6 +104,20 @@ router.post('/api/excel', (ctx) => {
 	const worksheet = workbook.Sheets[sheetName]
 	const jsonData = XLSX.utils.sheet_to_json(worksheet) // 转 JSON
 	ctx.body = exc2json(jsonData)
+})
+
+router.post('/api/excel/txt', (ctx) => {
+	const file = ctx.file
+	if (!file) {
+		ctx.body = { code: 400, msg: '未上传文件' }
+		return
+	}
+	// 解析 Excel
+	const workbook = XLSX.read(file.buffer, { type: 'buffer' })
+	const sheetName = workbook.SheetNames[0] // 取第一个 sheet
+	const worksheet = workbook.Sheets[sheetName]
+	const jsonData = XLSX.utils.sheet_to_json(worksheet) // 转 JSON
+	ctx.body = exc2txt(jsonData)
 })
 
 const { getBin, updateBin } = require('./srv/bin');

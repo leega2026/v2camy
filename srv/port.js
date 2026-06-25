@@ -211,13 +211,13 @@ function str2command(str) {
 }
 
 const Type2ByteHex = {
-	air: '0008', both: '000f', uponly: '0008'
+	air: '0008', both: '0014', uponly: '000c'
 }
 const Type2ByteNum = {
-	air: 8, both: 16, uponly: 8
+	air: 8, both: 20, uponly: 12
 }
 const Type2HexPadding = {
-	air: 'FFFF', both: 'FFFFFFFFFFFFFFFFFFFF', uponly: 'FFFF'
+	air: 'FFFF', both: 'FFFFFFFFFFFFFFFFFFFFFFFFFFFF', uponly: 'FFFFFFFFFFFF'
 }
 // function formatBufForSend(buf, type) {
 // 	const len = buf.length

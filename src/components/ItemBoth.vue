@@ -47,8 +47,8 @@
             {key: 'R_P_MED', val: 10}, {key: 'R_P_WAX', val: 11}, 
             {key: 'RN_R', val: 12}, {key: 'RNR_P_OFF', val: 13}, 
             {key: 'RNR_P_MIN', val: 14}, {key: 'RNR_P_MED', val: 15}, 
-            {key: 'RNR_P_WAX', val: 16}, {key: 'RN_MZ', val: 17}, 
-            {key: 'RN_KM', val: 18}, {key: 'RN_KZ', val: 19}],
+            {key: 'RNR_P_WAX', val: 16}, {key: 'FMIN_MED', val: 17}, 
+            {key: 'FMED_MAX', val: 18}, {key: 'FMIN_MAX', val: 19}, {key: 'RMIN_MAX', val: 20}],
           val: 0
         }, {
           id: 4,
@@ -74,8 +74,8 @@
           val: 1
         }, {
           id: 9,
-          selecs: [{key: '3D_STOP', val: 0}, {key: '3D_UP', val: 1}, 
-            {key: '3D_DN', val: 2}, {key: '3D_DNUP', val: 3}],
+          selecs: [{key: 'D_STOP', val: 0}, {key: 'D_UP', val: 1}, 
+            {key: 'D_DN', val: 2}, {key: 'D_DNUP', val: 3}],
           val: 0
         }, {
           id: 10,
@@ -104,8 +104,8 @@
           id: 21,
           selecs: [{key: 'PARK', val: 0}, {key: 'ABSULATE', val: 1}, 
             {key: 'TOP', val: 2}, {key: 'TOP_FW', val: 3}, {key: 'LOW_FW', val: 4}, 
-            {key: '1PART', val: 5}, {key: '2PART', val: 6}, {key: '3PART', val: 7}, 
-            {key: '4PART', val: 8}, {key: '5PART', val: 9}, {key: 'FULL', val: 10}],
+            {key: 'PART1', val: 5}, {key: 'PART2', val: 6}, {key: 'PART3', val: 7}, 
+            {key: 'PART4', val: 8}, {key: 'PART5', val: 9}, {key: 'FULL', val: 10}],
           val: 0
         }, {
           id: 22,

@@ -65761,10 +65761,10 @@ var require_lib6 = __commonJS({
           if (type2 == "uponly") {
             var val12 = j[12] && j[12].val || 0;
             arr.push(val12 % 256);
-            arr.push(val12 - val12 % 256);
+            arr.push(parseInt(val12 / 256));
             var val13 = j[13] && j[13].val || 0;
             arr.push(val13 % 256);
-            arr.push(val13 - val13 % 256);
+            arr.push(parseInt(val13 / 256));
           }
           break;
         case "air":
@@ -68683,18 +68683,18 @@ var require_port = __commonJS({
     }
     var Type2ByteHex = {
       air: "0008",
-      both: "000f",
-      uponly: "0008"
+      both: "0014",
+      uponly: "000c"
     };
     var Type2ByteNum = {
       air: 8,
-      both: 16,
-      uponly: 8
+      both: 20,
+      uponly: 12
     };
     var Type2HexPadding = {
       air: "FFFF",
-      both: "FFFFFFFFFFFFFFFFFFFF",
-      uponly: "FFFF"
+      both: "FFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      uponly: "FFFFFFFFFFFF"
     };
     function formatBinBuffer(buf, type2) {
       const header = "FAFAF5F5";

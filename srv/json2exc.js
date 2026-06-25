@@ -24,20 +24,20 @@ const UpMap = {
 	  'R_P_MED',   'R_P_WAX',
 	  'RN_R',      'RNR_P_OFF',
 	  'RNR_P_MIN', 'RNR_P_MED',
-	  'RNR_P_WAX', 'RN_MZ',
-	  'RN_KM',     'RN_KZ'
+	  'RNR_P_WAX', 'FMIN_MED',
+	  'FMED_MAX', 'FMIN_MAX', 'RMIN_MAX'
 	],
 	5: [ 'STOP', 'QD_WID', 'QD', 'PD', 'QD_MP3' ],
-	9: [ '3D_STOP', '3D_UP', '3D_DN', '3D_DNUP' ]
+	9: [ 'D_STOP', 'D_UP', 'D_DN', 'D_DNUP' ]
 }
 
 const DownMap = {
 	1: [
 	  'PARK',   'ABSULATE',
 	  'TOP',    'TOP_FW',
-	  'LOW_FW', '1PART',
-	  '2PART',  '3PART',
-	  '4PART',  '5PART',
+	  'LOW_FW', 'PART1',
+	  'PART2',  'PART3',
+	  'PART4',  'PART5',
 	  'FULL'
 	],
 	3: [
@@ -49,11 +49,11 @@ const DownMap = {
 	  'R_P_MED',   'R_P_WAX',
 	  'RN_R',      'RNR_P_OFF',
 	  'RNR_P_MIN', 'RNR_P_MED',
-	  'RNR_P_WAX', 'RN_MZ',
-	  'RN_KM',     'RN_KZ'
+	  'RNR_P_WAX', 'FMIN_MED',
+	  'FMED_MAX', 'FMIN_MAX', 'RMIN_MAX'
 	],
 	5: [ 'STOP', 'QD_WID', 'QD', 'PD', 'QD_MP3' ],
-	9: [ '3D_STOP', '3D_UP', '3D_DN', '3D_DNUP' ]
+	9: [ 'D_STOP', 'D_UP', 'D_DN', 'D_DNUP' ]
 }
 
 module.exports = {
@@ -78,6 +78,14 @@ module.exports = {
 			return exc2jsonAir(jd.slice(1))
 		}
 		return {}
+	},
+	exc2txt: (jd) => {
+		var res = ''
+		jd = jd.slice(1)
+		jd.forEach((one) => {
+			res += `{${Object.values(one).slice(1).join(',')}},\n`
+		})
+		return res
 	}
 }
 
