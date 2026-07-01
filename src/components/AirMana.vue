@@ -1,7 +1,7 @@
 <template>
   <div id="main3">
     <div class="buttonBox">
-      <el-button type="success" @click="add" size="mini" icon="el-icon-circle-plus">添加</el-button>
+      <el-button type="success" @click="add()" size="mini" icon="el-icon-circle-plus">添加</el-button>
       <el-button type="primary" @click="save" size="mini" icon="el-icon-upload2">保存</el-button>
       <el-select size="mini" v-model="caches.selected" filterable placeholder="请选择">
         <el-option

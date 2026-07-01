@@ -65400,6 +65400,7 @@ var require_json2exc = __commonJS({
       5: ["STOP", "QD_WID", "QD", "PD", "QD_MP3"],
       9: ["D_STOP", "D_UP", "D_DN", "D_DNUP"]
     };
+    var AirNameMap = ["PE1", "PE2", "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "LUP", "LDW", "BUP", "BDW", "FEUP", "FEDW", "LEUP", "LEDW", "REXU", "REXD", "LEXU", "LEXD"];
     module2.exports = {
       json2exc: (type2, name2, d) => {
         switch (type2) {
@@ -65425,11 +65426,26 @@ var require_json2exc = __commonJS({
       },
       exc2txt: (jd) => {
         var res2 = "";
-        jd = jd.slice(1);
-        jd.forEach((one) => {
-          res2 += `{${Object.values(one).slice(1).join(",")}},
+        if (jd[0][1] == "\u529B\u5EA61") {
+          jd = jd.slice(1);
+          jd.forEach((one) => {
+            var arr = Object.values(one).slice(1);
+            var rlts = [];
+            arr.slice(5).forEach((one2, i) => {
+              if (+one2) {
+                rlts.push(AirNameMap[i]);
+              }
+            });
+            res2 += `{${arr.slice(0, 5).join(",")},${rlts.join("|")}},
 `;
-        });
+          });
+        } else {
+          jd = jd.slice(1);
+          jd.forEach((one) => {
+            res2 += `{${Object.values(one).slice(1).join(",")}},
+`;
+          });
+        }
         return res2;
       }
     };

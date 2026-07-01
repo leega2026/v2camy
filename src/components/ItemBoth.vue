@@ -24,7 +24,7 @@
           selecs: [{key: 'KNEAD', val: 31}, {key: 'KNOCK', val: 32}, {key: 'PRESS', val: 33}, 
             {key: 'WAVELET', val: 34}, {key: 'PAT', val: 35}, {key: 'SHIATSU', val: 36}, 
             {key: 'SWING', val: 37}, {key: 'STRETCH', val: 38}],
-          val: 0
+          val: 31
         }, {
           id: 1,
           selecs: [{key: 'PARK', val: 0}, {key: 'ABSULATE', val: 1}, {key: 'SHOULDER', val: 2}, 
