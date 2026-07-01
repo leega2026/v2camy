@@ -75,7 +75,7 @@ lists = lists.concat(liste)
 .tableItem {
   position: relative;
   height: 28px;
-  width:2050px;
+  width:2110px;
 }
 .tableItem li {
   float: left;
@@ -99,6 +99,9 @@ lists = lists.concat(liste)
   width: 104px;
 }
 .tableItem li:nth-child(7) {
+  width: 104px;
+}
+.tableItem li:nth-child(38) {
   width: 104px;
 }
 .el-divider {

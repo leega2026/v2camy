@@ -203,12 +203,15 @@
         }).catch(() => {
         });
       },
+      add () {
+        this.$parent.add(this.up.listId-1)
+      },
       refresh() {
-		this.doSwitch = this.up.lists[0].val == 7
-		this._data.uLists[11].vals = val2binaryArr(this.up.lists[11].val)
-		this._data.dLists[11].vals = val2binaryArr(this.down.lists[11].val)
-		this._data.dLists[0].vals = val2binaryArr(this.down.lists[0].val)
-	  }
+    		this.doSwitch = this.up.lists[0].val == 7
+    		this._data.uLists[11].vals = val2binaryArr(this.up.lists[11].val)
+    		this._data.dLists[11].vals = val2binaryArr(this.down.lists[11].val)
+    		this._data.dLists[0].vals = val2binaryArr(this.down.lists[0].val)
+  	  }
     }
   };
 
@@ -254,6 +257,7 @@ function val2binaryArr(val) {
     </li>
     <li>
     <el-button type="danger"  size="mini" @click="remove" icon="el-icon-delete" circle></el-button>
+    <el-button type="success"  size="mini" @click="add" icon="el-icon-plus" circle></el-button>
     </li>
   </div>
   <div class="tableItem">
@@ -328,7 +332,7 @@ function val2binaryArr(val) {
 
 <style scoped>
 .tableItem {
-  min-width:1510px;
+  min-width:1550px;
   text-align: left;
 }
 .tableItem li {
@@ -350,7 +354,7 @@ function val2binaryArr(val) {
   width: 60px;
 }
 .tableItem li:nth-child(15) {
-  width: 60px;
+  width: 100px;
 }
 .tableItem .el-input-number {
   width: 100px !important;

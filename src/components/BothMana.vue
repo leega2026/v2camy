@@ -4,7 +4,7 @@
   overflow-x: scroll;
 }
 #TableItemBoxBoth {
-  width: 1510px;
+  width: 1550px;
   font-size: 12px;
   line-height: 28px;
   max-height:600px;
@@ -98,7 +98,7 @@ export default {
           console.error('err ', e)
         })
     },
-    add() {
+    add(ind) {
       var up = {
         lists: [
           {val: 0}, {val: 0}, {val: 1}, {val: 0}, {val: 1}, 
@@ -126,9 +126,15 @@ export default {
           val: 0
         })
       }
-      this._data.ups.push(up)
-      this._data.downs.push(down)
-      this._data.sws.push(sw)
+      if (!arguments.length) {
+        this._data.ups.push(up)
+        this._data.downs.push(down)
+        this._data.sws.push(sw)
+      } else {
+        this._data.ups.splice(ind, 0, up)
+        this._data.downs.splice(ind, 0, down)
+        this._data.sws.splice(ind, 0, sw)
+      }
       this.refreshListId()
     },
     save() {

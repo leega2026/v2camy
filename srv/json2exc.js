@@ -56,6 +56,8 @@ const DownMap = {
 	9: [ 'D_STOP', 'D_UP', 'D_DN', 'D_DNUP' ]
 }
 
+const AirNameMap = ['PE1', 'PE2', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'LUP', 'LDW', 'BUP', 'BDW', 'FEUP', 'FEDW', 'LEUP', 'LEDW', 'REXU', 'REXD', 'LEXU', 'LEXD']
+
 module.exports = {
 	json2exc: (type, name, d) => {
 		switch(type) {
@@ -81,10 +83,24 @@ module.exports = {
 	},
 	exc2txt: (jd) => {
 		var res = ''
-		jd = jd.slice(1)
-		jd.forEach((one) => {
-			res += `{${Object.values(one).slice(1).join(',')}},\n`
-		})
+		if (jd[0][1] == '力度1') {
+			jd = jd.slice(1)
+			jd.forEach((one) => {
+				var arr = Object.values(one).slice(1)
+				var rlts = []
+				arr.slice(5).forEach((one, i) => {
+					if (+one) {
+						rlts.push(AirNameMap[i])
+					}
+				})
+				res += `{${arr.slice(0, 5).join(',')},${rlts.join('|')}},\n`
+			})
+		} else {
+			jd = jd.slice(1)
+			jd.forEach((one) => {
+				res += `{${Object.values(one).slice(1).join(',')}},\n`
+			})
+		}
 		return res
 	}
 }
@@ -248,4 +264,19 @@ function exc2jsonAir(arr) {
 		return upList
 	})
 	return rt
+}
+
+function binToHex(binStr) {
+    // 位数不足4位前面补0
+    while (binStr.length % 8 !== 0) {
+        binStr = "0" + binStr;
+    }
+    let hex = [];
+    for (let i = 0; i < binStr.length; i += 8) {
+        const four = binStr.slice(i, i + 8);
+        const num = parseInt(four, 2);
+        hex.push(num.toString(16).toUpperCase()) 
+    }
+    console.log(hex)
+    return hex.join('')
 }

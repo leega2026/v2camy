@@ -161,6 +161,7 @@ export default {
     return caches
   },
   created() {
+    localStorage.setItem('isAuth', 'false')
     this.fetchData()
   },
   methods: {

@@ -52,7 +52,7 @@ export default {
           console.error('err ', e)
         })
     },
-    add() {
+    add(ind) {
       var up = {
         lists: [
           {val: 0}, {val: 0}, {val: 1}, {val: 0}, {val: 1}, {val: 0},{val: 1}, {val: 1}, 
@@ -62,7 +62,11 @@ export default {
         listId: 0,
         vId: ++vId
       }
-      this._data.ups.push(up)
+      if (!arguments.length) {
+        this._data.ups.push(up)
+      } else {
+        this._data.ups.splice(ind, 0, up)
+      }
       this.refreshListId()
     },
     save() {
@@ -173,7 +177,7 @@ export default {
   overflow-x: scroll;
 }
 #TableItemBox {
-  width: 1740px;
+  width: 1780px;
    max-height:600px;
   overflow-y: scroll;
   overflow-x: hidden;

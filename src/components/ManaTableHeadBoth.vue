@@ -48,7 +48,7 @@ const lists = [{
 .tableItem {
   position: relative;
   height: 28px;
-  width:1510px;
+  width:1550px;
 }
 .tableItem li {
   float: left;
@@ -64,7 +64,7 @@ const lists = [{
   width: 60px;
 }
 .tableItem li:nth-child(15) {
-  width: 60px;
+  width: 100px;
 }
 .el-divider {
   float: left;

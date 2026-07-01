@@ -51,7 +51,7 @@ const lists = [{
 }
 .tableItem {
   position: relative;
-  width:1740px;
+  width:1780px;
 }
 .tableItem li {
   width: 110px;
@@ -64,7 +64,7 @@ const lists = [{
   width: 60px;
 }
 .tableItem li:nth-child(17) {
-  width: 60px;
+  width: 100px;
 }
 .tableItem li:nth-child(2) {
   width: 60px;

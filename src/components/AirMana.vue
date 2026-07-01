@@ -18,6 +18,7 @@
     </div> 
     <TabHead />
     <div :id="itemBoxId">
+      <TabItem  v-for="up in ups" :key="up.vId" :up=up />
     </div>
   </div>
 </template>
@@ -28,15 +29,15 @@ import TabHead from '../components/ManaTableHeadAir.vue'
 import axios from '../lib/axios'
 import func from '../lib/func'
 const caches = {selected: "", obj: {}, type: 'air'}
-const localData = {ups: [], count: 0}
+var vId = 0
 
 export default {
   name: 'HelloWorld',
   components: {
-    TabHead
+    TabHead, TabItem
   },
   data() {
-    return {ups: localData.ups, caches, itemBoxId: 'TableItemBoxAir'}
+    return {ups: [], caches, itemBoxId: 'TableItemBoxAir'}
   },
   created() {
     this.fetchData()
@@ -51,12 +52,42 @@ export default {
           console.error('err ', e)
         })
     },
-    add() {
-      const dom = document.querySelector(`#${this._data.itemBoxId}`)
-      var clearedData = func.addComp(dom, TabItem, 'air-item-dom', localData.count+1, this)
-      localData.ups.push(clearedData)
-      localData.count++
-      return clearedData
+    getOne() {
+      var lists = []
+      for (var i = 0; i < 35; i++) {
+        if (i <= 29) {
+          lists.push({
+            id: i,
+            val: 0
+          })
+        } else {
+          lists.push({
+            id: i,
+            val: 0,
+            range: [0, 255]
+          })
+        }
+      }
+      return {lists:lists, checked: true, listId: 0, vId: ++vId}
+    },
+    add(ind) {
+      var one = this.getOne()
+      if (!arguments.length) {
+        this._data.ups.push(one)
+      } else {
+        this._data.ups.splice(ind, 0, one)
+      }
+      this.refreshListId()
+    },
+    refreshListId() {
+      var c = 0
+      this._data.ups.forEach((up, i) => {
+        if (up.checked) {
+          up.listId = ++c
+        } else {
+          up.listId = ''
+        }
+      })
     },
     save() {
       this.$prompt('保存名称', '保存', {
@@ -64,7 +95,7 @@ export default {
         cancelButtonText: '取消',
         inputValue: caches.selected
       }).then(({ value }) => {
-        var _d = {ups: localData.ups.slice(), count: localData.count, type: 'air'}
+        var _d = {ups: this._data.ups.slice(), type: 'air'}
         axios.post('/api/data', {
           key: value,
           data: _d
@@ -85,10 +116,13 @@ export default {
       var d = data || caches.selected && caches.obj[caches.selected]
       if (!d) return
       this._clear()
-      d.ups.forEach((list) => {
-        var data = this.add()
-        func.match(list, data)
+      console.log(d)
+      d.ups.forEach((up) => {
+        up.listId = 0
+        up.vId = ++vId
+        this._data.ups.push(up)
       })
+      this.refreshListId()
     },
     excel() {
       axios.get(`/api/excel?type=air&name=${caches.selected}`, { responseType: 'blob' })
@@ -137,23 +171,11 @@ export default {
       });
     },
     _clear() {
-      document.querySelector(`#${this._data.itemBoxId}`).innerHTML = ''
-      localData.ups = [] 
-      localData.count = 0
-    },
-    reload() {
-      console.log('reload')
-      var ups = localData.ups
-      this._clear()
-      ups.forEach((list) => {
-        var data = this.add()
-        func.match(list, data)
-      })
+      this._data.ups = [] 
     },
     childRemove(id) {
-      localData.ups.splice(id-1, 1)
-      localData.count--
-      this.reload()
+      this._data.ups.splice(id-1, 1)
+      this.refreshListId()
     }
   }
 }
@@ -166,13 +188,13 @@ export default {
   overflow-x: scroll;
 }
 #TableItemBoxAir {
-  width: 2050px;
+  width: 2110px;
   max-height:600px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
 #TestBinTableItemBox {
-  width: 2050px;
+  width: 2110px;
   max-height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
